@@ -1,0 +1,12 @@
+test:
+  override:
+    # Testing that lxc-in-lxc works
+    - sudo lxc-create -n n1 -t ubuntu-cloud
+    - sudo lxc-start -n n1 -d
+    - ( sudo lxc-attach -n n1 -- echo hello ) | grep hello
+
+    # Testing docker works
+    - sudo service docker start
+    - sudo docker pull learn/tutorial
+    - sudo docker run learn/tutorial echo hi
+    - ( sudo docker run learn/tutorial echo hihi ) | grep hihi
