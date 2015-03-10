@@ -7,11 +7,12 @@ test:
 
     # Testing docker works
     - sudo service docker start
-    - sudo docker pull learn/tutorial
-    - sudo docker run learn/tutorial echo hi
-    - ( sudo docker run learn/tutorial echo hihi ) | grep hihi
+    - docker info
+    - docker pull learn/tutorial
+    - docker run learn/tutorial echo hi
+    - ( docker run learn/tutorial echo hihi ) | grep hihi
 
-    # Testing volums
+    # Testing volumes
     - mkdir /tmp/a
     - docker run -v /tmp/a:/tmp/a busybox /bin/sh -c 'echo hihi; echo asdf > /tmp/a/b; cat /tmp/a/b'
     - grep asdf /tmp/a/b
