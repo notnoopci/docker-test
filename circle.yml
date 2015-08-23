@@ -1,8 +1,6 @@
 machine:
   pre:
     - sudo sed -i 's/^limit/#limit/g' /etc/init/docker.conf
-  services:
-    - docker
 
 test:
   override:
@@ -15,9 +13,9 @@ test:
     - sudo service docker start
     - docker version
     - docker info
-    - docker pull learn/tutorial
-    - docker run learn/tutorial echo hi
-    - ( docker run learn/tutorial echo hihi ) | grep hihi
+    - docker pull busybox
+    - docker run busybox echo hi
+    - ( docker run busybox echo hihi ) | grep hihi
 
     # Testing volumes
     - mkdir /tmp/a
