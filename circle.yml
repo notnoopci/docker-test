@@ -1,23 +1,12 @@
 machine:
-  pre:
-    - sudo sed -i 's/^limit/#limit/g' /etc/init/docker.conf
+  services:
+    - docker
+dependencies:
+  override:
+    - docker build -t aro-postgis .
+    - docker run --name postgres -e POSTGRES_PASSWORD=aro -e POSTGRES_USER=aro -p 5434:5432 -d aro-postgis 
 
 test:
   override:
-    # Testing that lxc-in-lxc works
-    - sudo lxc-create -n n1 -t ubuntu-cloud
-    - sudo lxc-start -n n1 -d
-    - ( sudo lxc-attach -n n1 -- echo hello ) | grep hello
+    - psql -c 'SELECT 1;
 
-    # Testing docker works
-    - sudo service docker start
-    - docker version
-    - docker info
-    - docker pull busybox
-    - docker run busybox echo hi
-    - ( docker run busybox echo hihi ) | grep hihi
-
-    # Testing volumes
-    - mkdir /tmp/a
-    - docker run -v /tmp/a:/tmp/a busybox /bin/sh -c 'echo hihi; echo asdf > /tmp/a/b; cat /tmp/a/b'
-    - grep asdf /tmp/a/b
